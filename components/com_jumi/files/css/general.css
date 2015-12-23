@@ -1,0 +1,87 @@
+.titulo {
+	width:100%;
+	text-align:center !important;
+	margin:16px 0px 16px 0px;	
+	font-weight:bold;
+	font-size: 22px;
+}
+
+#webReport {
+	font-size:10px;
+	font-family:Arial, Helvetica, sans-serif;
+	border:1px solid black;
+}
+
+#webReport tr.encabezado {
+	background-color:#E3E3E3;
+}
+
+#webReport tr.encabezado2 {
+	background-color:#707070;
+	color:white;
+}
+
+#webReport tr.sumarizado {
+	color:#E3E3E3;
+	background-color:#222222;
+}
+
+#frmTable th {
+	text-align:left;
+}
+
+#webReport th {
+	text-align:center;
+	font-weight:bold;
+	font-size:11px;
+	padding:6px;
+	
+}
+
+#webReport tr:hover {
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#webReport th,#webReport td {
+	border-right:1px solid black;
+	border-bottom:1px solid black;
+	padding:0px 4px;
+}
+
+.msgMtto {
+	border:1px solid; 
+	border-color: #366BA3;
+	font-weight:bold; 
+	color:#366BA3; 
+	background-color:#BADBFF; 
+	width:400px; 
+	margin-top:4px; 
+	padding:6px; 
+	text-align:center;
+}
+
+#paging {
+	text-align:center !important;
+	margin:14px 6px 6px 6px;
+	width:500px;
+}
+
+#paging a {
+	padding:2px 4px;
+	font-weight:bold;
+}
+
+#paging .currPaging {
+	border:1px solid #636363;
+	background-color: white;
+	color:#636363 !important;
+}
+
+#paging .numPaging {
+	border:1px solid #636363;
+	background-color: #636363;
+	color:white !important;
+}
+
+

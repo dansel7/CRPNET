@@ -543,6 +543,7 @@ a:focus {
 }
 p {
 	margin: 0 0 9px;
+        color: white;
 }
 .lead {
 	margin-bottom: 18px;

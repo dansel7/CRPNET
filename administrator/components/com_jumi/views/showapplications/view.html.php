@@ -68,7 +68,7 @@ else {
 			JHtmlSidebar::addFilter(
 					JText::_('JOPTION_SELECT_PUBLISHED'),
 					'filter_published',
-					JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->filter->published, true)
+					JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', false, true)
 			);
 	
 			parent::display($tpl);

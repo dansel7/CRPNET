@@ -19,7 +19,7 @@ if(JV == 'j2') {
 ?>
 
         <script type="text/javascript">
-		<?php if(version_compare( JVERSION, '1.6.0', 'lt' )) { ?>
+		<?php if(version_compare( JVERSION, '3.4.5', 'lt' )) { ?>
 		function submitbutton(task) {
 		<?php } else { ?>
 		Joomla.submitbutton = function(task) {
@@ -119,7 +119,8 @@ else {
 	JHtml::_('bootstrap.tooltip');
 ?>
         <script type="text/javascript">
-		<?php if(version_compare( JVERSION, '1.6.0', 'lt' )) { ?>
+		<?php
+                if(version_compare( JVERSION, '3.4.5', 'lt' )) { ?>
 		function submitbutton(task) {
 		<?php } else { ?>
 		Joomla.submitbutton = function(task) {

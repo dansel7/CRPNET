@@ -11,7 +11,7 @@ require_once JPATH_COMPONENT . '/router.php';
 if(!defined('DS')){
 	define('DS',DIRECTORY_SEPARATOR);
 }
-define('JV', (version_compare(JVERSION, '3', 'l')) ? 'j2' : 'j3');
+define('JV', (version_compare(JVERSION, '3.4.5', 'lt')) ? 'j2' : 'j3');
 
 jimport('joomla.application.component.controller');
 
