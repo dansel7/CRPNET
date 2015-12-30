@@ -29,9 +29,10 @@ include_once 'include/header.php';
      $Consulta=true;
              
      
-if(isset($_POST["docIdentidad"])){     
+if(isset($_POST["accion"])){     
     $accion = (isset($_POST["accion"]) ? $_POST["accion"] : null);
 }
+
 ?>
 
 <style>
@@ -112,6 +113,14 @@ if(isset($_POST["docIdentidad"])){
 </style>
 <script type="text/javascript">
 	$(function () {
+            $("input[name=tatuajes]:radio").change(function () {
+                if(this.value=="Si"){
+                   $("#captura_tatuaje").attr('hidden', false); 
+                }else{
+                    $("#captura_tatuaje").attr('hidden', true); 
+                }
+            });
+            
 		$("#frmCandidato").stepyform({
 			navButtonsAttrs: {
 			"class":"navegacion"
@@ -121,7 +130,7 @@ if(isset($_POST["docIdentidad"])){
 			onChangeStep: function(){
 				console.log(this)
 			}
-		})
+		});
 	})
 	</script>
         
@@ -143,23 +152,42 @@ $(function(){
 		function(){
 		$(this).stop().animate({backgroundPosition: "(0px 0px)"}, 250);
 		}
-	);			
+	);	
+
 });
+
+function CapturarFoto(){
+    var docId=document.getElementById("DocIdentidad").value;
+    if(docId==""){
+       alert('Ingrese Documento de Identidad');  
+       document.getElementById("DocIdentidad").focus();
+    }else{
+       document.getElementById("image_path").value=document.getElementById("DocIdentidad").value+".jpg";
+       webcam.freeze(); 
+    }
+}
+function CapturarTatuaje(){
+    var docId=document.getElementById("DocIdentidad").value;
+    if(docId==""){
+       alert('Ingrese Documento de Identidad');  
+       document.getElementById("DocIdentidad").focus();
+    }else{
+       document.getElementById("image_tatuaje_path").value="tatuaje-"+document.getElementById("DocIdentidad").value+".jpg";
+       webcam.freeze(); 
+    }
+}
+
+
 </script>
         <h1>Ingreso de Candidatos</h2>        
-        <form action="" id="frmCandidato" name="frmCandidato"  onsubmit="do_upload()" method="POST">
-        <div class="stepy-step">
-            <h2>Datos Generales</h2>
-            
-            <br>Documento de Identidad:<br>
-            <input type="text" class="text :required" id="DocIdentidad" name="DocIdentidad" value="<?php echo isset($_POST["docIdentidad"])?$_POST["docIdentidad"]:"";?>" placeholder="Documento de Identidad">
-           
-            
-            <!-- INICIO DE CAMARA -->
-            <input type="hidden" class="text" id="image_path" name="image_path" value="" placeholder="Fotografia">
+        <form action="" id="frmCandidato" name="frmCandidato" method="POST">
         
+         
+        <!-- INICIO DE CAMARA CANDIDATO -->
+        <input type="hidden" class="text" id="image_path" name="image_path" value="" placeholder="Fotografia">
         <table><tr><td valign=top>
-	<h3>Tome la fotografia y luego guardela.</h3>
+        
+	<h3>Capture fotografia del candidato</h3>
 	
 	<!-- First, include the JPEGCam JavaScript Library -->
 	<script type="text/javascript" src="src/webcam.js" ></script>
@@ -177,22 +205,22 @@ $(function(){
 	</script>
 	
 	<!-- Some buttons for controlling things -->
-	<br/>
+	<br/><center>
         <form>
-		<input type=button value="Tomar foto" onClick="webcam.freeze()">
-		&nbsp;&nbsp;
-		<input type=button value="Volver a tomar" onClick="webcam.reset()">                
-		
-
-	</form>
+		<input type=button value="Tomar foto" onClick="CapturarFoto();">
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type=button value="Volver a tomar" onClick="webcam.reset()">   
+                &nbsp;&nbsp;&nbsp;&nbsp;
+		<input type=button value="Guardar Foto" onClick="do_upload();">  
+	</form></center>  
 	
-	<!-- Code to handle the server response (see test.php) -->
+	
 	<script language="JavaScript">
 		webcam.set_hook( 'onComplete', 'my_completion_handler' );
 		
 		function do_upload() {
 			// upload to server
-			document.getElementById('upload_results').innerHTML = '<h1>Cargando...</h1>';
+			document.getElementById('upload_results').innerHTML = '<h1>Cargando Fotografia...</h1>';
 			webcam.upload();
 		}
 		
@@ -205,24 +233,31 @@ $(function(){
 					'' + 
 					'<h1>Imagen tomada</h1>' + 
 					'<img src="' + image_url + '">';
-				
 				// reset camera for another shot
 				webcam.reset();
 			}
-			else alert("PHP Error: " + msg);
+			else {
+                            alert("PHP Error: " + msg);
+                        }
 		}
 	</script>
 	
+            
 	</td><td width=50>&nbsp;</td><td valign=top>
 		<div id="upload_results" style="width:100px;background-color:#eee;"></div>
 	</td></tr>	
 	</table>
+            <!-- FIN DE CAMARA CANDIDATO -->
             
-            <!-- FIN DE CAMARA -->
-            
-             <br>Tipo de Documento:<br>
+        <div class="stepy-step">
+            <h2>Datos Generales</h2>
+            <b>(Solicitar Documento de Identidad)</b><br>
+            <br>Documento de Identidad:<br>
+            <input type="text" class="text :required" id="DocIdentidad" name="DocIdentidad" value="<?php echo isset($_POST["docIdentidad"])?$_POST["docIdentidad"]:"";?>" placeholder="Documento de Identidad">
+                     
+            <br>Tipo de Documento:<br>
             <select id="tipo_documento" class="combobox" name="tipo_documento">
-                <option value="DUI" selected>DUI</option>   
+                <option value="DUI" selected>DUI</option>
                 <option value="Pasaporte">Pasaporte</option>
                 <option value="Otros">Otros</option>   
             </select>
@@ -281,6 +316,68 @@ $(function(){
             <br>Tatuajes:<br>
             <input type="radio" name="tatuajes" id="tatuajeSi" value="Si">Si&nbsp;&nbsp;&nbsp;
             <input type="radio" name="tatuajes" id="tatuajeNo" value="No" checked="true">No<br>
+            
+<!--                          INICIO DE CAMARA TATUAJE 
+                    <div id="captura_tatuaje" hidden="true">
+                    <input type="hidden" class="text" id="image_tatuaje_path" name="image_tatuaje_path" value="" placeholder="Fotografia">
+                    <table><tr><td valign=top>
+                    Capture imagen de Tatuaje
+                     First, include the JPEGCam JavaScript Library 
+                    <script type="text/javascript" src="src/webcam.js" ></script>
+                     Configure a few settings 
+                    <script language="JavaScript">
+                            webcam.set_api_url( '<?php echo $filePath; ?>image_tatuaje.php?id='+ document.getElementById('DocIdentidad').value);
+                            webcam.set_quality( 90 ); // JPEG quality (1 - 100)
+                            webcam.set_shutter_sound( true ); // play shutter click sound
+                    </script>
+
+                     Next, write the movie to the page at 320x240 
+                    <script language="JavaScript">
+                            document.write( webcam.get_html(150, 150) );
+                    </script>
+
+                     Some buttons for controlling things 
+                    <br/>
+                    <form>
+                            <input type=button value="Tomar foto" onClick="CapturarTatuaje()">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type=button value="Volver a tomar" onClick="webcam.reset()">     
+                    </form> 
+
+                    <script language="JavaScript">
+                            webcam.set_hook( 'onComplete', 'my_completion_handler' );
+
+                            function do_upload() {
+                                    // upload to server
+                                    document.getElementById('upload_results_t').innerHTML = '<h1>Cargando...</h1>';
+                                    webcam.upload();
+                            }
+
+                            function my_completion_handler(msg) {
+                                    // extract URL out of PHP output
+                                    if (msg.match(/(http\:\/\/\S+)/)) {
+                                            var image_url = RegExp.$1;
+                                            // show JPEG image in page
+                                            document.getElementById('upload_results').innerHTML = 
+                                                    '' + 
+                                                    '<h1>Imagen tomada</h1>' + 
+                                                    '<img src="' + image_url + '">';
+
+                                            // reset camera for another shot
+                                            webcam.reset();
+                                    }
+                                    else alert("PHP Error: " + msg);
+                            }
+                    </script>
+
+
+                    </td><td width=50>&nbsp;</td><td valign=top>
+                            <div id="upload_results_t" style="width:100px;background-color:#eee;"></div>
+                    </td></tr>	
+                    </table>
+                    </div>
+                         FIN DE CAMARA TATUAJE-->
+            
             <br>Visita Domiciliar:<br>
             <input type="radio" name="visitaDomiciliar" id="visitaDomiciliarSi" value="Si">Si&nbsp;&nbsp;&nbsp;
             <input type="radio" name="visitaDomiciliar" id="visitaDomiciliarNo" value="No" checked="true">No<br>
@@ -318,7 +415,7 @@ $(function(){
 if($accion=="Agregar"){
         $excepciones="accion, view, ";
         $tabla="Candidatos";
-
+        $campos="";
             foreach ($_POST as $campo => $valor)
 	  		{
 			if (!preg_match("/$campo, /", $excepciones))
@@ -329,25 +426,18 @@ if($accion=="Agregar"){
 	  		$campos = preg_replace('/, $/', '', $campos);//para quitar la coma del final de la cadena
 
 	  		$sql = "INSERT INTO ".$tabla." SET ".$campos;
-            echo $sql;
-                        $sql = "";
-              if (mysql_query($sql))
+                        echo $sql;
+              if (mysqli_query($connDB,$sql))
         	  {		
-        		  echo "<script>alert('Se ha ingresado Exitosamente');</script>";
-                  $idingreso=mysql_insert_id();	
+        	  echo "<script>alert('Se ha ingresado Exitosamente');</script>";
+                  $idingreso=mysqli_insert_id($connDB);	
         	  }
         	  else
         	  {
         		echo "<script>alert('Hubo un Error al Ingresar Registro');</script>";
-        	  }
-              
+        	  } 
     }else if($accion=="Actualizar"){
         
     }
 
 ?>
-
-
-
-        
-        

@@ -34,7 +34,19 @@ include_once 'include/header.php';
         document.forms["formPpal"].submit();        
     }
 </script>
+<style>
+#candidato table {     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 12px;    margin: 45px;     width: 480px; text-align: left;    border-collapse: collapse; }
 
+#candidato th {     font-size: 13px;     font-weight: normal;     padding: 8px;     background: #b9c9fe;
+    border-top: 4px solid #aabcfe;    border-bottom: 1px solid #fff; color: #039; }
+
+#candidato td {    padding: 8px;     background: #e8edff;     border-bottom: 1px solid #fff;
+    color: #669;    border-top: 1px solid transparent; }
+
+#candidato tr:hover td { background: #d0dafd; color: #339; }
+</style>
+    
 <br>
 <br>
 
@@ -56,16 +68,19 @@ if(isset($_POST["busqueda"])){
     $query="select * from candidatos where DocIdentidad like '%".$docIdentidad."%'";
     $result = $objConn->runQuery($query);
     $nRegistros=(@mysqli_num_rows($result))? @mysqli_num_rows($result): 0;
-    echo "<br>Se encontraron ".$nRegistros." coincidencia(s)<br><br>";
+    echo "<br>Se encontraron ".$nRegistros." coincidencia(s)<br>";
     
     if($nRegistros==0){
         
         echo '<center><input type="button" name="nuevoCand" id="nuevoCand" onclick="nuevoCandidato()" value="Agregar Nuevo Candidato"></center>';
         
     }else{
-        while ($row=@mysqli_fetch_array($result)) {
-        echo $row["DocIdentidad"]." --- ".$row["nombre"]." ".$row["apellido"];
+        echo "<div id=\"candidato\"> <table>";
+        echo "<tr><th>Documento Identidad </th><th>Nombre de Candidato</th><th>Fotografia</th></tr>";
+        while ($row=@mysqli_fetch_array($result)){
+        echo "<tr><td>".$row["DocIdentidad"]." </td><td>".$row["nombre"]." ".$row["apellido"]."</td><td><img width=\"75px\" height=\"75px\" src=\"$filePath"."imgCandidato/".$row["image_path"]."\"></td></tr>";
         }
+        echo "</table></div>";
     }
 }
 
